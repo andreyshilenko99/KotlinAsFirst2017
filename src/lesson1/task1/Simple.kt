@@ -87,30 +87,30 @@ fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double): Double = sqrt((
 fun thirdDigit(number: Int ): Int= (number%1000)/100
 
 
-    /**
-     * Простая
-     *
-     * Поезд вышел со станции отправления в h1 часов m1 минут (например в 9:25) и
-     * прибыл на станцию назначения в h2 часов m2 минут того же дня (например в 13:01).
-     * Определите время поезда в пути в минутах (в данном случае 216).
-     */
-    fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int =(hoursArrive*60+minutesArrive)-(hoursDepart*60+minutesDepart)
+/**
+ * Простая
+ *
+ * Поезд вышел со станции отправления в h1 часов m1 минут (например в 9:25) и
+ * прибыл на станцию назначения в h2 часов m2 минут того же дня (например в 13:01).
+ * Определите время поезда в пути в минутах (в данном случае 216).
+ */
+fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int =(hoursArrive*60+minutesArrive)-(hoursDepart*60+minutesDepart)
 
-    /**
-     * Простая
-     *
-     * Человек положил в банк сумму в s рублей под p% годовых (проценты начисляются в конце года).
-     * Сколько денег будет на счету через 3 года (с учётом сложных процентов)?
-     * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
-     */
-    fun accountInThreeYears(initial: Int, percent: Int): Double = (initial+initial*(percent/100.0)+(initial+initial*(percent/100.0))*(percent/100.0))+(initial+initial*(percent/100.0)+(initial+initial*(percent/100.0))*(percent/100.0))*(percent/100.0)
+/**
+ * Простая
+ *
+ * Человек положил в банк сумму в s рублей под p% годовых (проценты начисляются в конце года).
+ * Сколько денег будет на счету через 3 года (с учётом сложных процентов)?
+ * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
+ */
+fun accountInThreeYears(initial: Int, percent: Int): Double = (initial+initial*(percent/100.0)+(initial+initial*(percent/100.0))*(percent/100.0))+(initial+initial*(percent/100.0)+(initial+initial*(percent/100.0))*(percent/100.0))*(percent/100.0)
 
-    /**
-     * Простая
-     *
-     * Пользователь задает целое трехзначное число (например, 478).
-     *Необходимо вывести число, полученное из заданного перестановкой цифр в обратном порядке (например, 874).
-     */
-    fun numberRevert(number: Int): Int = (number%10)*100+((number%100)/10)*10+(number%1000/100)
+/**
+ * Простая
+ *
+ * Пользователь задает целое трехзначное число (например, 478).
+ *Необходимо вывести число, полученное из заданного перестановкой цифр в обратном порядке (например, 874).
+ */
+fun numberRevert(number: Int): Int = (number%10)*100+((number%100)/10)*10+(number%1000/100)
 
 
