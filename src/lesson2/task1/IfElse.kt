@@ -81,7 +81,7 @@ fun timeForHalfWay(t1: Double, v1: Double,
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
                        rookX2: Int, rookY2: Int): Int = TODO()
-}
+
 
 
 
@@ -101,7 +101,7 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
                           bishopX: Int, bishopY: Int): Int = TODO()
 
-}
+
 
 /**
  * Простая
@@ -111,9 +111,9 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = when = TODO()ª
+fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
 
-}
+
 
 /**
  * Средняя
