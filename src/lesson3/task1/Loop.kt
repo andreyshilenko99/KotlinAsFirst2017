@@ -3,6 +3,21 @@
 package lesson3.task1
 
 /**
+ * Вспомогательная
+ *
+ * Наибольший Общий Делитель
+ */
+fun NOD(x: Int, y: Int): Int {
+    var a = x
+    var b = y
+    while (a != 0 && b != 0) {
+        if (a > b) a %= b
+        else b %= a
+    }
+    return a + b
+}
+
+/**
  * Пример
  *
  * Вычисление факториала
@@ -63,10 +78,10 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 fun digitNumber(n: Int): Int {
     var number = 0
-    var x = n
+    var x = Math.abs(n)
     if (x == 0) return (1)
     while (x > 0) {
-        number += 1
+        number++
         x /= 10
     }
     return (number)
@@ -98,17 +113,9 @@ fun fib(n: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int {
-    var minmultiple = 1
-    var minmultiple2 = 1
-    for (i in 1..m * n) {
-        if ((i % n == 0) && (i % m == 0)) return minmultiple * i
-        minmultiple2 = minmultiple * i
+fun lcm(m: Int, n: Int): Int = n * m / NOD(n,m)
 
-    }
-    return minmultiple2
 
-}
 
 /**
  * Простая
@@ -239,17 +246,7 @@ fun revert(n: Int): Int {
  * первая цифра равна последней, вторая -- предпоследней и так далее.
  * 15751 -- палиндром, 3653 -- нет.
  */
-fun isPalindrome(n: Int): Boolean {
-    var palindrome = 0
-    var number = n
-    while (n > palindrome) {
-        palindrome = number % 10 + palindrome * 10
-        number /= 10
-
-    }
-    if (n == palindrome) return true
-    else return false
-}
+fun isPalindrome(n: Int): Boolean = n == revert(n)
 
 /**
  * Средняя
