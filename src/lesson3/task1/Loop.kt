@@ -220,7 +220,7 @@ fun cos(x: Double, eps: Double): Double {
         counter += 1
         cos += equation
     }
-    return cos
+    return  cos
 }
 
 /**
