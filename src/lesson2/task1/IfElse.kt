@@ -37,15 +37,10 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = when {
-    ((age % 10) == 1) && ((age % 100) != 11) -> ("$age год")
-    ((age % 100) == 11) -> ("$age лет")
-    ((age % 10 in 2..4)) && ((age % 100) !in 12..14) -> ("$age года")
-    (age % 100) in 12..14 -> ("$age лет")
-    ((age % 10) in 5..9) && ((age % 100) !in 15..19) -> ("$age лет")
-    ((age % 100) in 15..19) -> ("$age лет")
-    ((age % 10) == 0) -> ("$age лет")
-    else -> ("0")
+fun ageDescription(age: Int): String =when {
+    age % 10 == 1 && age % 100 / 10 != 1 -> "$age год"
+    age % 10 in 2..4 && age % 100 / 10 != 1 -> "$age года"
+    else -> "$age лет"
 }
 
 /**
@@ -58,14 +53,14 @@ fun ageDescription(age: Int): String = when {
 fun timeForHalfWay(t1: Double, v1: Double,
                    t2: Double, v2: Double,
                    t3: Double, v3: Double): Double {
-    val s1: Double = v1 * t1
-    val s2: Double = v2 * t2
-    val s3: Double = v3 * t3
-    val s4: Double = (s1 + s2 + s3) / 2.0
-    if (s4 <= s1) return s4 / v1
-    if (s4 <= s1 + s2) return (t1 + (s4 - s1) / v2)
-    if (s4 <= s1 + s2 + s3) return (t1 + t2 + (s4 - s1 - s2) / v3)
-    else return (s4)
+    val s1 = t1 * v1
+    val s2 = t2 * v2
+    val sh = (s1 + s2 + t3 * v3) / 2.0
+    return when {
+        s1 >= sh -> sh / v1
+        s2 >= sh - s1 -> t1 + (sh - s1) / v2
+        else -> t1 + t2 + (sh - s1 - s2) / v3
+    }
 }
 
 
@@ -164,10 +159,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    if (c <= a && d >= b) return (b - a)
-    if (a <= c && b >= d) return (d - c)
-    if (c in a..b && d >= b) return (b - c)
-    if (c <= a && d in a..b) return d - a
-    else return -1
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
+    a <= c && b in c..d -> b - c
+    a <= c && d in c..b -> d - c
+    a >= c && b in a..d -> b - a
+    a >= c && d in a..b -> d - a
+
+    else -> -1
 }
