@@ -62,9 +62,9 @@ fun seconds(hours: Int, minutes: Int, seconds: Int): Int = ((hours * 60 + minute
  * 1 сажень = 3 аршина = 48 вершков, 1 вершок = 4.445 см.
  */
 fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
-    val sgenesinarshins: Int = sagenes * 3 + arshins
-    val arshinsinvershoks: Double = sgenesinarshins / 3.0 * 48 + vershoks
-    return (arshinsinvershoks * 4.445) / 100
+    val sgenesInArshins: Int = sagenes * 3 + arshins
+    val arshinsInVershoks: Double = sgenesInArshins / 3.0 * 48 + vershoks
+    return (arshinsInVershoks * 4.445) / 100
 }
 
 /**
@@ -111,13 +111,8 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Сколько денег будет на счету через 3 года (с учётом сложных процентов)?
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
-fun accountInThreeYears(initial: Int, percent: Int): Double {
-    val y1: Double = initial + initial / 100.0 * percent
-    val y2: Double = y1 + y1 / 100.0 * percent
-    val y3: Double = y2 + y2 / 100.0 * percent
-    return y3
-
-}
+fun accountInThreeYears(initial: Int, percent: Int): Double =
+        initial * pow(1 + percent.toDouble() / 100, 3.0)
 
 
 /**
