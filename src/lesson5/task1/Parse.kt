@@ -66,7 +66,17 @@ fun main(args: Array<String>) {
  * День и месяц всегда представлять двумя цифрами, например: 03.04.2011.
  * При неверном формате входной строки вернуть пустую строку
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val mont =
+            listOf("€нвар€", "феврал€", "марта", "апрел€", "ма€", "июн€",
+                    "июл€", "августа", "сент€бр€", "окт€бр€", "но€бр€", "декабр€")
+    var dateInDigits = ""
+    val parts = str.split(" ")
+    if (parts.size != 3 || parts[1] !in mont)
+        return dateInDigits
+    val indexOf = mont.indexOf(parts[1])
+    return String.format("%02d.%02d.%s", parts[0].toInt(), indexOf + 1, parts[2])
+}
 
 /**
  * Средняя
@@ -113,7 +123,26 @@ fun bestLongJump(jumps: String): Int = TODO()
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    var maxVal = -1
+    var currentVal = -1
+    var listOfTry = listOf("")
+    val listOfRes = jumps.split(" ").reversed()
+    for (i in listOfRes) {
+        try {
+            currentVal = i.toInt()
+            if ("+" in listOfTry && currentVal > maxVal)
+                maxVal = currentVal
+        }
+        catch (e: NumberFormatException) {
+            listOfTry = i.split("")
+            val elements = listOfTry.filter { it == "+" && it == "-" && it == "%" && it == "" }
+            if (!elements.isEmpty())
+                return -1
+        }
+    }
+    return maxVal
+}
 
 /**
  * Сложная
@@ -135,7 +164,21 @@ fun plusMinus(expression: String): Int = TODO()
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    if (str.isEmpty())
+        return -1
+    val wordsList = str.split(" ")
+    var Word = ""
+    var index = 0
+    for (i in wordsList) {
+        if (i.toLowerCase() == Word.toLowerCase()) {
+            return str.indexOf(Word.first(), index - 1)
+        }
+        index += Word.length + 1
+        Word = i
+    }
+    return -1
+}
 
 /**
  * Сложная

@@ -2,12 +2,14 @@
 
 package lesson3.task1
 
+import lesson1.task1.sqr
+
 /**
  * Вспомогательная
  *
  * Наибольший Общий Делитель
  */
-fun NOD(x: Int, y: Int): Int {
+fun gcd(x: Int, y: Int): Int {
     var a = x
     var b = y
     while (a != 0 && b != 0) {
@@ -84,7 +86,7 @@ fun digitNumber(n: Int): Int {
         number++
         x /= 10
     }
-    return (number)
+    return number
 }
 
 /**
@@ -94,17 +96,17 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    var gyt = 0
+    var numbFib = 0
     var c = 1
     var a = 0
-    var i = 0
-    while (n > i) {
+    var count = 0
+    while (n > count) {
         a = c
-        c = gyt
-        gyt = a + gyt
-        i++
+        c = numbFib
+        numbFib = numbFib + a
+        count++
     }
-    return gyt
+    return numbFib
 }
 
 /**
@@ -113,8 +115,7 @@ fun fib(n: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = n * m / NOD(n,m)
-
+fun lcm(m: Int, n: Int): Int = n * m / gcd(n, m)
 
 
 /**
@@ -124,11 +125,9 @@ fun lcm(m: Int, n: Int): Int = n * m / NOD(n,m)
  */
 fun minDivisor(n: Int): Int {
     var mindivisor = 1
-    for (i in 2..n) {
-        if (n % i == 0) return i
-        mindivisor = mindivisor * i
-
-    }
+    do {
+        mindivisor++
+    } while (n % mindivisor != 0)
     return mindivisor
 }
 
@@ -138,12 +137,13 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var maxdivisor = 1
+    //var maxdivisor = 1
     for (divisor in n - 1 downTo 1)
         if (n % divisor == 0) {
-            maxdivisor = divisor; break
+            //maxdivisor = divisor; break
+            return divisor
         }
-    return maxdivisor
+    return 1
 }
 
 /**
@@ -153,21 +153,8 @@ fun maxDivisor(n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    var count = 0
-    if (n > m)
-        for (i in 2..n) {
-            if ((n % i == 0) && (m % i == 0))
-                count++
-        }
-    else
-        for (i in 2..m) {
-            if ((n % i == 0) && (m % i == 0))
-                count++
-        }
-    if (count > 0) return false
-    else return true
-}
+
+fun isCoPrime(m: Int, n: Int): Boolean = gcd(m, n) == 1
 
 /**
  * Простая
@@ -176,11 +163,9 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var numb: Int = Math.sqrt(m.toDouble()).toInt()
-    if (numb * numb < m) numb++
-    return if (numb <= Math.sqrt(n.toDouble())) true else false
-}
+fun squareBetweenExists(m: Int, n: Int): Boolean =
+        ((Math.pow(Math.ceil(Math.sqrt(m.toDouble())), 2.0) <= n)
+                || (Math.pow(Math.floor(Math.sqrt(n.toDouble())), 2.0) >= m))
 
 
 /**
@@ -191,14 +176,14 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double {
+    val sinConst = x % (2 * Math.PI)
     var counter = 1
-    var sin = x % (2 * Math.PI)
-    val sinConst = sin
-    var equation = sin
-    while (Math.abs(equation) >= eps) {
-        equation = -equation * sinConst / ((counter * 2 + 1) * (counter * 2)).toDouble() * sinConst
-        counter += 1
-        sin += equation
+    var sin = sinConst
+    var memberOf = sinConst
+    while (Math.abs(memberOf) >= eps) {
+        memberOf = -memberOf * sqr(sinConst) / ((counter * 2 + 1) * (counter * 2)).toDouble()
+        counter++
+        sin += memberOf
     }
     return sin
 }
@@ -210,18 +195,9 @@ fun sin(x: Double, eps: Double): Double {
  * cos(x) = 1 - x^2 / 2! + x^4 / 4! - x^6 / 6! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun cos(x: Double, eps: Double): Double {
-    var equation = 1.0
-    var counter = 1
-    var cos = 1.0
-    val const = x % (2 * Math.PI)
-    while (Math.abs(equation) >= eps) {
-        equation = -equation * const / ((counter * 2 - 1) * (counter * 2)).toDouble() * const
-        counter += 1
-        cos += equation
-    }
-    return  cos
-}
+fun cos(x: Double, eps: Double): Double = sin(Math.PI / 2 + x, eps)
+/* Более простое решение */
+
 
 /**
  * Средняя
@@ -254,7 +230,7 @@ fun isPalindrome(n: Int): Boolean = n == revert(n)
  * Для заданного числа n определить, содержит ли оно различающиеся цифры.
  * Например, 54 и 323 состоят из разных цифр, а 111 и 0 из одинаковых.
  */
-fun hasDifferentDigits(n: Int): Boolean = digitCountInNumber(n, n % 10) != "$n".length
+fun hasDifferentDigits(n: Int): Boolean = digitNumber(n) != digitCountInNumber(n, n % 10)
 
 /**
  * Сложная
@@ -264,18 +240,17 @@ fun hasDifferentDigits(n: Int): Boolean = digitCountInNumber(n, n % 10) != "$n".
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var numbers = 1
-    var str = ""
-    var nn = n
-    while (nn > 0) {
-        val sqrnumb = numbers * numbers
-        str = "$sqrnumb"
-        numbers++
-        nn -= str.length
+    var m = 0
+    var k = 0
+    while (k < n) {
+        m++
+        k += digitNumber(m * m)
     }
-    numbers = str.length - 1 + nn
-    return str[numbers].toString().toInt()
+    var result = m * m
+    for (i in n until k) result /= 10
+    return result % 10
 }
+
 
 /**
  * Сложная
@@ -285,15 +260,13 @@ fun squareSequenceDigit(n: Int): Int {
  * Например, 2-я цифра равна 1, 9-я 2, 14-я 5.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var numbers = 1
-    var str = ""
-    var nn = n
-    while (nn > 0) {
-        val fibnumb = fib(numbers)
-        str = "$fibnumb"
-        numbers++
-        nn -= str.length
+    var m = 0
+    var k = 0
+    while (k < n) {
+        m++
+        k += digitNumber(fib(m))
     }
-    numbers = str.length - 1 + nn
-    return str[numbers].toString().toInt()
+    var result = m * m
+    for (i in n until k) result /= 10
+    return result % 10
 }

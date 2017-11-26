@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson4.task1
 
 import lesson1.task1.discriminant
@@ -106,14 +107,19 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = TODO()
+fun abs(v: List<Double>): Double {
+    var abs = 0.0
+    for (i in v) abs += Math.pow(i, 2.0)
+    return Math.sqrt(abs)
+
+}
 
 /**
  * Простая
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = TODO()
+fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sum() / list.size
 
 /**
  * Средняя
@@ -124,16 +130,14 @@ fun mean(list: List<Double>): Double = TODO()
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> =
-when {
-    list.isEmpty() -> list
-    else -> {
-        val const = list.sum() / list.size
-        for (elCount in 0 until list.size) {
-            list[elCount] -= const
+        if (list.isEmpty()) list
+        else {
+            val const = list.sum() / list.size
+            for (elCount in 0 until list.size) {
+                list[elCount] -= const
+            }
+            list
         }
-        list
-    }
-}
 
 
 /**
@@ -143,7 +147,11 @@ when {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
  */
-fun times(a: List<Double>, b: List<Double>): Double = TODO()
+fun times(a: List<Double>, b: List<Double>): Double {
+    var multi = 0.0
+    for (i in 0 until a.size) multi += a[i] * b[i]
+    return multi
+}
 
 /**
  * Средняя
@@ -153,7 +161,13 @@ fun times(a: List<Double>, b: List<Double>): Double = TODO()
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0.0 при любом x.
  */
-fun polynom(p: List<Double>, x: Double): Double = TODO()
+fun polynom(p: List<Double>, x: Double): Double {
+    var result = 0.0
+    if (p.isEmpty())
+        for (i in 0 until p.size)
+            result += p[i] * Math.pow(x, i.toDouble())
+    return result
+}
 
 /**
  * Средняя
@@ -165,7 +179,15 @@ fun polynom(p: List<Double>, x: Double): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
+fun accumulate(list: MutableList<Double>): MutableList<Double> {
+    if (list.isEmpty()) return list
+    var sum = list[0]
+    for (i in 1..list.lastIndex) {
+        sum += list[i]
+        list[i] = sum
+    }
+    return list
+}
 
 /**
  * Средняя
@@ -182,7 +204,9 @@ fun factorize(n: Int): List<Int> = TODO()
  * Разложить заданное натуральное число n > 1 на простые множители.
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String =
+        factorize(n).joinToString(separator = "*")
+
 
 /**
  * Средняя
@@ -211,7 +235,7 @@ fun convert(n: Int, base: Int): List<Int> {
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String  {
+fun convertToString(n: Int, base: Int): String {
     val list = convert(n, base)
     val abc = "abcdefghijklmnopqrstuvwxyz"
     var str = ""
@@ -228,7 +252,7 @@ fun convertToString(n: Int, base: Int): String  {
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int  {
+fun decimal(digits: List<Int>, base: Int): Int {
     var n = 0
     val list = digits.reversed()
     for (elCount in 0 until digits.size)
@@ -264,21 +288,21 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String  {
-    var str = ""
-    val rimNumb = listOf<Int>(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
-    val rimAbc = listOf<String>("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
-    var n1 = n
+fun roman(n: Int): String {
+    var number = ""
+    val arabNumb = listOf<Int>(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    val rimNumb = listOf<String>("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    var natur = n
     var i = 0
-    while (rimNumb[i] > n) i += 1
-    while (n1 > 0) {
-        while (n1 - rimNumb[i] >= 0) {
-            str += rimAbc[i]
-            n1 -= rimNumb[i]
+    while (arabNumb[i] > n) i += 1
+    while (natur > 0) {
+        while (natur - arabNumb[i] >= 0) {
+            number += rimNumb[i]
+            natur -= arabNumb[i]
         }
         i += 1
     }
-    return str
+    return number
 }
 
 /**

@@ -20,10 +20,10 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean {
-    val count1: Int = (number % 100 - number % 10) / 10 + number % 10
-    val count2: Int = (number % 1000 - number % 100) / 100 + (number - number % 1000) / 1000
-    if (count1 == count2) return true
-    else return false
+    val count1 = number / 1000 + (number % 1000) / 100
+    val count2 = number % 10 + (number % 100) / 10
+    return count1 == count2
+
 }
 
 /**
@@ -33,10 +33,10 @@ fun isNumberHappy(number: Int): Boolean {
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    if ((Math.abs(x1 - x2) == Math.abs(y2 - y1)) || (x1 == x2) || (y1 == y2)) return true
-    else return false
-}
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
+    (Math.abs(x1 - x2) == Math.abs(y2 - y1)) || (x1 == x2) || (y1 == y2)
+
+
 
 /**
  * Средняя
@@ -59,5 +59,6 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean =
-        (a <= r && b <= s) || (a <= s && b <= r) || (b <= r && c <= s) || (b <= s && c <= r) || (a <= r && c <= s) || (a <= s && c <= r)
+        (minOf( a , b , c ) <= r && ((a + b + c) - minOf(a, b, c) - maxOf( a , b , c ) <= s))
+                || (minOf( a , b , c ) <= s && ((a + b + c) - minOf(a, b, c) - maxOf( a , b , c )) <= r)
 
