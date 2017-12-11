@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson5.task1
 
 /**
@@ -48,12 +49,10 @@ fun main(args: Array<String>) {
         val seconds = timeStrToSeconds(line)
         if (seconds == -1) {
             println("Введённая строка $line не соответствует формату ЧЧ:ММ:СС")
-        }
-        else {
+        } else {
             println("Прошло секунд с начала суток: $seconds")
         }
-    }
-    else {
+    } else {
         println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
     }
 }
@@ -68,8 +67,8 @@ fun main(args: Array<String>) {
  */
 fun dateStrToDigit(str: String): String {
     val mont =
-            listOf("€нвар€", "феврал€", "марта", "апрел€", "ма€", "июн€",
-                    "июл€", "августа", "сент€бр€", "окт€бр€", "но€бр€", "декабр€")
+            listOf("января", "февраля", "марта", "апреля", "мая", "июня",
+                    "июля", "августа", "сентября", "октября", "ноября", "декабря")
     var dateInDigits = ""
     val parts = str.split(" ")
     if (parts.size != 3 || parts[1] !in mont)
@@ -99,7 +98,12 @@ fun dateDigitToStr(digital: String): String = TODO()
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    val result = Regex("""[\s-]""").replace(phone, "")
+    val format = Regex("""^(\+[0-9]+)?(\([0-9]+\))?([0-9]+)$""")
+    if(!result.matches(format)) return ""
+    return Regex("""[()]""").replace(result, "")
+}
 
 /**
  * Средняя
@@ -111,7 +115,18 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    val format = Regex("""[0-9%\-\s]*""")
+    val d = Regex("""[0-9]""")
+    if(!jumps.matches(format) || !jumps.contains(d)) return -1
+    val numer = Regex("""%|-""").replace(jumps,"")
+    val num = Regex("""\s+""").split(numer).toMutableList()
+    val res = mutableListOf(0)
+    for(e in num)
+        if(e != "") res.add(e.toInt())
+    return res.max()!!
+}
+
 
 /**
  * Сложная
@@ -126,17 +141,16 @@ fun bestLongJump(jumps: String): Int = TODO()
 fun bestHighJump(jumps: String): Int {
     var maxVal = -1
     var currentVal = -1
-    var listOfTry = listOf("")
-    val listOfRes = jumps.split(" ").reversed()
-    for (i in listOfRes) {
+    var listOfTryings = listOf("")
+    val listOfResults = jumps.split(" ").reversed()
+    for (i in listOfResults) {
         try {
             currentVal = i.toInt()
-            if ("+" in listOfTry && currentVal > maxVal)
+            if ("+" in listOfTryings && currentVal > maxVal)
                 maxVal = currentVal
-        }
-        catch (e: NumberFormatException) {
-            listOfTry = i.split("")
-            val elements = listOfTry.filter { it == "+" && it == "-" && it == "%" && it == "" }
+        } catch (e: NumberFormatException) {
+            listOfTryings = i.split("")
+            val elements = listOfTryings.filter { it == "+" && it == "-" && it == "%" && it == "" }
             if (!elements.isEmpty())
                 return -1
         }
@@ -153,7 +167,17 @@ fun bestHighJump(jumps: String): Int {
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    val format = Regex("""^([0-9]+)(\s+(\+|-)\s+([0-9]+))*$""")
+    if (!expression.matches(format)) throw IllegalArgumentException("for input string \"$expression\"")
+    val parts = expression.split(" ")
+    var result = parts[0].toInt()
+    for (i in 1 until parts.size step 2) { // чтение символов операций
+        if (parts[i] == "-") result -= parts[i + 1].toInt()
+        else result += parts[i + 1].toInt()
+    }
+    return result
+}
 
 /**
  * Сложная
@@ -168,14 +192,14 @@ fun firstDuplicateIndex(str: String): Int {
     if (str.isEmpty())
         return -1
     val wordsList = str.split(" ")
-    var Word = ""
+    var prevWord = ""
     var index = 0
     for (i in wordsList) {
-        if (i.toLowerCase() == Word.toLowerCase()) {
-            return str.indexOf(Word.first(), index - 1)
+        if (i.toLowerCase() == prevWord.toLowerCase()) {
+            return str.indexOf(prevWord.first(), index - 1)
         }
-        index += Word.length + 1
-        Word = i
+        index += prevWord.length + 1
+        prevWord = i
     }
     return -1
 }
@@ -191,7 +215,19 @@ fun firstDuplicateIndex(str: String): Int {
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть положительными
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    val format = Regex("""^([^;]+)\s([0-9]+(.[0-9]+)?)(;([^;]+)\s([0-9]+(.[0-9]+)?))*""")
+    if (!description.matches(format)) return ""
+    val parts = Regex("""\s|(;\s)""").split(description)
+    var max = parts[1].toFloat()
+    var max_index = 1
+    for (i in 3 until parts.size step 2)
+        if (parts[i].toFloat() > max) {
+            max = parts[i].toFloat()
+            max_index = i
+        }
+    return parts[max_index - 1]
+}
 
 /**
  * Сложная
@@ -204,7 +240,23 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    val form = Regex("""[CDILMVX]+""")
+    val classic = mapOf('I' to 1, 'V' to 5, 'X' to 10, 'L' to 50, 'C' to 100,
+            'D' to 500, 'M' to 1000)
+    var result = 0
+    var bigger = 0
+    if (!roman.matches(form)) return -1
+    for (i in roman.length - 1 downTo 0) {
+        if (classic[roman[i]]!! < bigger)
+            result -= classic[roman[i]]!!
+        else {
+            bigger = classic[roman[i]]!!
+            result += bigger
+        }
+    }
+    return result
+}
 
 /**
  * Очень сложная

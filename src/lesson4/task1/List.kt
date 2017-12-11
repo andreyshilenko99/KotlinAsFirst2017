@@ -3,6 +3,9 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.isPrime
+import lesson3.task1.maxDivisor
+import lesson3.task1.minDivisor
 
 /**
  * Пример
@@ -109,9 +112,8 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  */
 fun abs(v: List<Double>): Double {
     var abs = 0.0
-    for (i in v) abs += Math.pow(i, 2.0)
+    for (elem in v) abs += ( elem * elem )
     return Math.sqrt(abs)
-
 }
 
 /**
@@ -129,15 +131,14 @@ fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sum() /
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> =
-        if (list.isEmpty()) list
-        else {
-            val const = list.sum() / list.size
-            for (elCount in 0 until list.size) {
-                list[elCount] -= const
-            }
-            list
+fun center(list: MutableList<Double>): MutableList<Double> {
+    if (list.isEmpty()) return list
+        val avg = list.sum() / list.size
+        for (elCount in 0 until list.size) {
+            list[elCount] -= avg
         }
+        return list
+}
 
 
 /**
@@ -163,9 +164,12 @@ fun times(a: List<Double>, b: List<Double>): Double {
  */
 fun polynom(p: List<Double>, x: Double): Double {
     var result = 0.0
-    if (p.isEmpty())
-        for (i in 0 until p.size)
-            result += p[i] * Math.pow(x, i.toDouble())
+    var power= 1.0
+    if (p.isNotEmpty())
+        for (i in 0 until p.size) {
+            result += p[i] * power
+            power *= x
+        }
     return result
 }
 
@@ -197,6 +201,8 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> {
  * Множители в списке должны располагаться по возрастанию.
  */
 fun factorize(n: Int): List<Int> = TODO()
+
+
 
 /**
  * Сложная
@@ -255,8 +261,11 @@ fun convertToString(n: Int, base: Int): String {
 fun decimal(digits: List<Int>, base: Int): Int {
     var n = 0
     val list = digits.reversed()
-    for (elCount in 0 until digits.size)
-        n += list[elCount] * Math.pow(base.toDouble(), elCount.toDouble()).toInt()
+    var toMult = 1
+    for (elCount in 0 until digits.size) {
+        n += list[elCount] * toMult
+        toMult *= base
+    }
     return n
 }
 

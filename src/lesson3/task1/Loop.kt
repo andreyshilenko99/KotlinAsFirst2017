@@ -137,10 +137,8 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    //var maxdivisor = 1
     for (divisor in n - 1 downTo 1)
         if (n % divisor == 0) {
-            //maxdivisor = divisor; break
             return divisor
         }
     return 1
@@ -179,11 +177,11 @@ fun sin(x: Double, eps: Double): Double {
     val sinConst = x % (2 * Math.PI)
     var counter = 1
     var sin = sinConst
-    var memberOf = sinConst
-    while (Math.abs(memberOf) >= eps) {
-        memberOf = -memberOf * sqr(sinConst) / ((counter * 2 + 1) * (counter * 2)).toDouble()
+    var memberOfSeries = sinConst
+    while (Math.abs(memberOfSeries) >= eps) {
+       memberOfSeries= -memberOfSeries * sqr(sinConst) / ((counter * 2 + 1) * (counter * 2)).toDouble()
         counter++
-        sin += memberOf
+        sin += memberOfSeries
     }
     return sin
 }
@@ -262,11 +260,13 @@ fun squareSequenceDigit(n: Int): Int {
 fun fibSequenceDigit(n: Int): Int {
     var m = 0
     var k = 0
+    var result = fib(m)
     while (k < n) {
         m++
         k += digitNumber(fib(m))
+        result = fib(m)
     }
-    var result = fib(m)
+    //var result = fib(m)
     for (i in n until k) result /= 10
     return result % 10
 }
