@@ -356,7 +356,6 @@ fun inRussian(fromOut: Int): MutableList<String> {
     time += 1;
     return result
 
-
 }
 
 /**
