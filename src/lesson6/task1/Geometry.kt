@@ -2,6 +2,7 @@
 package lesson6.task1
 
 import lesson1.task1.sqr
+import lesson2.task1.segmentLength
 
 /**
  * Точка на плоскости
@@ -72,14 +73,15 @@ data class Circle(val center: Point, val radius: Double) {
      * расстояние между их центрами минус сумма их радиусов.
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
-    fun distance(other: Circle): Double = TODO()
+    fun distance(other: Circle): Double = if (center.distance(other.center) - radius - other.radius <= 0) 0.0
+    else center.distance(other.center) - radius - other.radius
 
     /**
      * Тривиальная
      *
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
-    fun contains(p: Point): Boolean = TODO()
+    fun contains(p: Point): Boolean = center.distance(p) <= radius
 }
 
 /**
@@ -107,7 +109,9 @@ fun diameter(vararg points: Point): Segment = TODO()
  * Построить окружность по её диаметру, заданному двумя точками
  * Центр её должен находиться посередине между точками, а радиус составлять половину расстояния между ними
  */
-fun circleByDiameter(diameter: Segment): Circle = TODO()
+fun circleByDiameter(diameter: Segment): Circle = Circle(Point((diameter.begin.x + diameter.end.x) / 2,
+        (diameter.begin.y + diameter.end.y) / 2), diameter.begin.distance(diameter.end) / 2)
+
 
 /**
  * Прямая, заданная точкой point и углом наклона angle (в радианах) по отношению к оси X.
@@ -128,7 +132,11 @@ class Line private constructor(val b: Double, val angle: Double) {
      * Найти точку пересечения с другой линией.
      * Для этого необходимо составить и решить систему из двух уравнений (каждое для своей прямой)
      */
-    fun crossPoint(other: Line): Point = TODO()
+    fun crossPoint(other: Line): Point {
+        val x = (other.b * Math.cos(angle) - b * Math.cos(other.angle)) / Math.sin(angle - other.angle)
+        val y = (b * Math.sin(other.angle) - other.b * Math.sin(angle)) / Math.sin(other.angle - angle)
+        return Point(x, y)
+    }
 
     override fun equals(other: Any?) = other is Line && angle == other.angle && b == other.b
 
@@ -146,14 +154,18 @@ class Line private constructor(val b: Double, val angle: Double) {
  *
  * Построить прямую по отрезку
  */
-fun lineBySegment(s: Segment): Line = TODO()
+fun lineBySegment(s: Segment): Line = lineByPoints(s.begin, s.end)
 
 /**
  * Средняя
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = TODO()
+fun lineByPoints(a: Point, b: Point): Line {
+    val angle = Math.atan((a.y - b.y) / (a.x - b.x))
+    return if (angle < 0.0) Line(a, Math.PI + angle)
+    else Line(a, angle)
+}
 
 /**
  * Сложная
@@ -179,7 +191,10 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> = TODO()
  * (построить окружность по трём точкам, или
  * построить окружность, описанную вокруг треугольника - эквивалентная задача).
  */
-fun circleByThreePoints(a: Point, b: Point, c: Point): Circle = TODO()
+fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
+    val center = bisectorByPoints(a, b).crossPoint(bisectorByPoints(b, c))
+    return Circle(center, center.distance(a))
+}
 
 /**
  * Очень сложная
@@ -193,4 +208,5 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle = TODO()
  * соединяющий две самые удалённые точки в данном множестве.
  */
 fun minContainingCircle(vararg points: Point): Circle = TODO()
+
 

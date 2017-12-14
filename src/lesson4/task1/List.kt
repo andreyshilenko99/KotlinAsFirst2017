@@ -48,13 +48,13 @@ fun biRoots(a: Double, b: Double, c: Double): List<Double> {
  * Выделить в список отрицательные элементы из заданного списка
  */
 fun negativeList(list: List<Int>): List<Int> {
-    val result = mutableListOf<Int>()
+    val resultult = mutableListOf<Int>()
     for (element in list) {
         if (element < 0) {
-            result.add(element)
+            resultult.add(element)
         }
     }
-    return result
+    return resultult
 }
 
 /**
@@ -163,14 +163,14 @@ fun times(a: List<Double>, b: List<Double>): Double {
  * Значение пустого многочлена равно 0.0 при любом x.
  */
 fun polynom(p: List<Double>, x: Double): Double {
-    var result = 0.0
+    var resultult = 0.0
     var power= 1.0
     if (p.isNotEmpty())
         for (i in 0 until p.size) {
-            result += p[i] * power
+            resultult += p[i] * power
             power *= x
         }
-    return result
+    return resultult
 }
 
 /**
@@ -200,7 +200,19 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> {
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int> {
+    var divisor = 2
+    var N = n
+    val list = mutableListOf<Int>()
+    while (N > 1) {
+        if (N % divisor == 0) {
+            N /= divisor
+            list.add(divisor)
+        } else
+            divisor+1
+    }
+    return list
+}
 
 
 
@@ -298,20 +310,53 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    var number = ""
-    val arabNumb = listOf<Int>(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
-    val rimNumb = listOf<String>("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    var numberber = ""
+    val arabnumberb = listOf<Int>(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    val rimnumberb = listOf<String>("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
     var natur = n
     var i = 0
-    while (arabNumb[i] > n) i += 1
+    while (arabnumberb[i] > n) i += 1
     while (natur > 0) {
-        while (natur - arabNumb[i] >= 0) {
-            number += rimNumb[i]
-            natur -= arabNumb[i]
+        while (natur - arabnumberb[i] >= 0) {
+            numberber += rimnumberb[i]
+            natur -= arabnumberb[i]
         }
         i += 1
     }
-    return number
+    return numberber
+}
+
+var time = 1;
+
+/** вспомогательная */
+fun inRussian(fromOut: Int): MutableList<String> {
+    val result = mutableListOf<String>()
+    val digits = fromOut % 10
+    val dozen = (fromOut % 100) / 10
+    val hundred = fromOut/ 100
+    val list1_9 = listOf("", "один", "два", "три", "четыре", "пять", "шесть", "семь",
+            "восемь", "девять")
+    val list10_19 = listOf("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать",
+            "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
+    val list20_90 = listOf("", "", "двадцать", "тридцать", "сорок", "пятьдесят",
+            "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
+    val list100_900 = listOf("", "сто", "двести", "триста", "четыреста",
+            "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
+    val listSecPart = listOf("тысяч", "одна тысяча", "две тысячи", "три тысячи", "четыре тысячи",
+            "пять тысяч", "шесть тысяч", "семь тысяч", "восемь тысяч", "девять тысяч")
+    result.add(list100_900[hundred])
+    if (dozen == 1) {
+        result.add(list10_19[digits])
+        if (time == 2) result.add(listSecPart[0])
+    } else {
+        result.add(list20_90[dozen])
+        if (time == 1) result.add(list1_9[digits])
+        else if (fromOut != 0) result.add(listSecPart[digits])
+    }
+    time += 1;
+    return result
+
+
 }
 
 /**
@@ -321,4 +366,9 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val thousand = n / 1000
+    val digit = n % 1000
+    val answer = (inRussian(thousand) + inRussian(digit)).filter { it != "" }
+    return answer.joinToString(separator = " ")
+}
