@@ -201,19 +201,23 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> {
  * Множители в списке должны располагаться по возрастанию.
  */
 fun factorize(n: Int): List<Int> {
-    var divisor = 2
-    var N = n
-    val list = mutableListOf<Int>()
-    while (N > 1) {
-        if (N % divisor == 0) {
-            N /= divisor
-            list.add(divisor)
-        } else
-            divisor+1
+    val result = mutableListOf<Int>()
+    if (isPrime(n)) {
+        result.add(n)
+        return result
     }
-    return list
+    var number = n
+    while (number >= 2) {
+        for (i in 2..n / 2) {
+            if (number % i == 0) {
+                result.add(i)
+                number /= i
+                break
+            }
+        }
+    }
+    return result
 }
-
 
 
 /**
