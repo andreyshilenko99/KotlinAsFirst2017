@@ -330,10 +330,9 @@ fun roman(n: Int): String {
     return numberber
 }
 
-var time = 1;
 
 /** вспомогательная */
-fun inRussian(fromOut: Int): MutableList<String> {
+fun inRussian(fromOut: Int, time: Int): MutableList<String> {
     val result = mutableListOf<String>()
     val digits = fromOut % 10
     val dozen = (fromOut % 100) / 10
@@ -357,7 +356,6 @@ fun inRussian(fromOut: Int): MutableList<String> {
         if (time == 1) result.add(list1_9[digits])
         else if (fromOut != 0) result.add(listSecPart[digits])
     }
-    time += 1;
     return result
 
 }
@@ -372,6 +370,6 @@ fun inRussian(fromOut: Int): MutableList<String> {
 fun russian(n: Int): String {
     val thousand = n / 1000
     val digit = n % 1000
-    val answer = (inRussian(thousand) + inRussian(digit)).filter { it != "" }
+    val answer = (inRussian(thousand, 2) + inRussian(digit, 1)).filter { it != "" }
     return answer.joinToString(separator = " ")
 }
