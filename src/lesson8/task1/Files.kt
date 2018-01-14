@@ -2,6 +2,7 @@
 package lesson8.task1
 
 import java.io.File
+import java.util.*
 
 /**
  * Пример
@@ -122,7 +123,46 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+//Так как readLines sequence то записываю в список строк
+    val listOfLines = File(inputName).readLines()
+    val out = File(outputName).bufferedWriter()
+    var maxLen = 0
+//высчет самой длинной
+    for (line in listOfLines){
+        if (line.trim().length > maxLen) maxLen = line.trim().length
+    }
+//выравнивание
+    for (line in listOfLines){
+//пустая значит ничего не записываю
+        if (line.isEmpty()) {
+            out.newLine()
+            continue
+        }
+//разность строк
+        var diff = maxLen - line.trim().length
+//трим убирает в начале и в конце пробелы делю по пробелам на слова в изменяемый список
+        val lineInWords = line.trim().split(" ").toMutableList()
+//одно слово не может быть выравнено пробелами(по заданию)
+        if (lineInWords.size == 1){
+            out.write(line.trim())
+            out.newLine()
+            continue
+        }
+// пока не заполню пробелами и разница между строками в длине не стане равна 0
+        while (diff != 0) {
+            for (i in 0 until lineInWords.size) {
+                if (i != lineInWords.lastIndex) {
+                    lineInWords[i] += " "
+                    diff--
+                }
+//наслучай если это наступит раньше
+                if (diff == 0) break
+            }
+        }
+        out.write(lineInWords.joinToString(separator = " "))
+        out.newLine()
+    }
+    out.close()
 }
 
 /**
@@ -139,7 +179,45 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  * Ключи в ассоциативном массиве должны быть в нижнем регистре.
  *
  */
-fun top20Words(inputName: String): Map<String, Int> = TODO()
+fun top20Words(inputName: String): Map<String, Int> {
+    val textOnFile = File(inputName).readText().toLowerCase()
+    val mapOfRepetitive = mutableMapOf<String, Int>()
+//ищем все слова (латинские или русские)
+    val result = Regex("""([а-я|ё]+)|(\w+)""").findAll(textOnFile)
+// для всех найденных
+    for (res in result){
+//берем значение(т.е. найденное слово)
+        val word = res.value
+//если такое уже есть то увеличиваем зачение иначе заносим в map
+        if (mapOfRepetitive[word] != null){
+            var repetitiveNum = mapOfRepetitive[word] ?: throw IllegalArgumentException()
+            repetitiveNum++
+            mapOfRepetitive.put(word, repetitiveNum)
+        }
+        else mapOfRepetitive.put(word, 1)
+    }
+//список с Entries отсортированный
+    val descendingListOfEntries = entriesSortedByValues(mapOfRepetitive)
+//map для 20ти
+    val mapOfTwenty = mutableMapOf<String, Int>()
+    for (i in 0 until descendingListOfEntries.size){
+//если набрали 20 то можно выйти из цикла
+        if (i == 20) break
+//заносим сообственно значения в map
+        mapOfTwenty.put(descendingListOfEntries[i].key, descendingListOfEntries[i].value)
+    }
+    return mapOfTwenty
+}
+//Сравнение
+fun <K, V : Comparable<V>> entriesSortedByValues(map: Map<K, V>): List<Map.Entry<K, V >> {
+//лист entries так как значения могут повторятся
+    val sortedEntries = map.entries.toList()
+//сортируем при помощи компаратора
+    Collections.sort(sortedEntries,
+            { e1, e2 -> e2.value.compareTo(e1.value) }
+    )
+    return sortedEntries
+}
 
 /**
  * Средняя

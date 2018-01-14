@@ -81,7 +81,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
 fun digitNumber(n: Int): Int {
     var number = 0
     var x = Math.abs(n)
-    if (x == 0) return (1)
+    if (x == 0) return 1
     while (x > 0) {
         number++
         x /= 10
@@ -96,17 +96,17 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    var numbFib = 0
+    var numberFib = 0
     var c = 1
     var a = 0
     var count = 0
     while (n > count) {
         a = c
-        c = numbFib
-        numbFib = numbFib + a
+        c = numberFib
+        numberFib = numberFib + a
         count++
     }
-    return numbFib
+    return numberFib
 }
 
 /**

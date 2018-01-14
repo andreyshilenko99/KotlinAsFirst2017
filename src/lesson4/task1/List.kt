@@ -112,7 +112,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  */
 fun abs(v: List<Double>): Double {
     var abs = 0.0
-    for (elem in v) abs += ( elem * elem )
+    for (elem in v) abs += (elem * elem)
     return Math.sqrt(abs)
 }
 
@@ -133,11 +133,11 @@ fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sum() /
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
     if (list.isEmpty()) return list
-        val avg = list.sum() / list.size
-        for (elCount in 0 until list.size) {
-            list[elCount] -= avg
-        }
-        return list
+    val avg = list.sum() / list.size
+    for (elCount in 0 until list.size) {
+        list[elCount] -= avg
+    }
+    return list
 }
 
 
@@ -164,12 +164,12 @@ fun times(a: List<Double>, b: List<Double>): Double {
  */
 fun polynom(p: List<Double>, x: Double): Double {
     var resultult = 0.0
-    var power= 1.0
-    if (p.isNotEmpty())
-        for (i in 0 until p.size) {
-            resultult += p[i] * power
-            power *= x
-        }
+    var power = 1.0
+    /*if (p.isNotEmpty())*/
+    for (i in 0 until p.size) {
+        resultult += p[i] * power
+        power *= x
+    }
     return resultult
 }
 
@@ -185,10 +185,8 @@ fun polynom(p: List<Double>, x: Double): Double {
  */
 fun accumulate(list: MutableList<Double>): MutableList<Double> {
     if (list.isEmpty()) return list
-    var sum = list[0]
     for (i in 1..list.lastIndex) {
-        sum += list[i]
-        list[i] = sum
+        list[i] += list[i-1]
     }
     return list
 }
@@ -336,7 +334,7 @@ fun inRussian(fromOut: Int, time: Int): MutableList<String> {
     val result = mutableListOf<String>()
     val digits = fromOut % 10
     val dozen = (fromOut % 100) / 10
-    val hundred = fromOut/ 100
+    val hundred = fromOut / 100
     val list1_9 = listOf("", "один", "два", "три", "четыре", "пять", "шесть", "семь",
             "восемь", "девять")
     val list10_19 = listOf("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать",
