@@ -103,7 +103,14 @@ fun generateSnake(height: Int, width: Int): Matrix<Int> = TODO()
  * 4 5 6      8 5 2
  * 7 8 9      9 6 3
  */
-fun <E> rotate(matrix: Matrix<E>): Matrix<E> = TODO()
+fun <E> rotate(matrix: Matrix<E>): Matrix<E> {
+    if (matrix.width != matrix.height) throw IllegalArgumentException()
+    val revertMatrix = createMatrix(matrix.height, matrix.width, matrix[0, 0])
+    for (column in 0 until matrix.height)
+        for (line in 0 until matrix.width)
+            revertMatrix[column, line] = matrix[matrix.height - 1 - line, column]
+    return revertMatrix
+}
 
 /**
  * Сложная
@@ -118,7 +125,22 @@ fun <E> rotate(matrix: Matrix<E>): Matrix<E> = TODO()
  * 1 2 3
  * 3 1 2
  */
-fun isLatinSquare(matrix: Matrix<Int>): Boolean = TODO()
+fun isLatinSquare(matrix: Matrix<Int>): Boolean {
+    if (matrix.height != matrix.width) return false
+    val setOfMatrixNum = mutableSetOf<Int>()
+    for (i in 1..matrix.width) setOfMatrixNum.add(i)
+    for (i in 0 until matrix.width) {
+        val setRow = mutableSetOf<Int>()
+        val setColumn = mutableSetOf<Int>()
+        for (j in 0 until matrix.height) {
+            setRow += matrix[i, j]
+            setColumn += matrix[j, i]
+        }
+        if (setRow != (setOfMatrixNum) || setColumn != (setOfMatrixNum))
+            return false
+    }
+    return true
+}
 
 /**
  * Средняя
@@ -154,7 +176,7 @@ fun sumNeighbours(matrix: Matrix<Int>): Matrix<Int> = TODO()
  * 0 0 1 0
  * 0 0 0 0
  */
-fun findHoles(matrix: Matrix<Int>): Holes = TODO()
+fun findHoles(matrix: Matrix<Int>): Holes =  TODO()
 
 /**
  * Класс для описания местонахождения "дырок" в матрице

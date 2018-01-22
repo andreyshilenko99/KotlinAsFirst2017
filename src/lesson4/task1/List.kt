@@ -165,7 +165,6 @@ fun times(a: List<Double>, b: List<Double>): Double {
 fun polynom(p: List<Double>, x: Double): Double {
     var resultult = 0.0
     var power = 1.0
-    /*if (p.isNotEmpty())*/
     for (i in 0 until p.size) {
         resultult += p[i] * power
         power *= x

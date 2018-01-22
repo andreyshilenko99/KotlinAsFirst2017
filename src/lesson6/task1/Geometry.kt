@@ -2,8 +2,7 @@
 package lesson6.task1
 
 import lesson1.task1.sqr
-import lesson2.task1.segmentLength
-
+import java.lang.Math.*
 /**
  * Точка на плоскости
  */
@@ -76,6 +75,8 @@ data class Circle(val center: Point, val radius: Double) {
     fun distance(other: Circle): Double = if (center.distance(other.center) - radius - other.radius <= 0) 0.0
     else center.distance(other.center) - radius - other.radius
 
+
+
     /**
      * Тривиальная
      *
@@ -109,8 +110,10 @@ fun diameter(vararg points: Point): Segment = TODO()
  * Построить окружность по её диаметру, заданному двумя точками
  * Центр её должен находиться посередине между точками, а радиус составлять половину расстояния между ними
  */
-fun circleByDiameter(diameter: Segment): Circle = Circle(Point((diameter.begin.x + diameter.end.x) / 2,
-        (diameter.begin.y + diameter.end.y) / 2), diameter.begin.distance(diameter.end) / 2)
+fun circleByDiameter(diameter: Segment): Circle =
+        Circle(Point((diameter.begin.x + diameter.end.x) / 2,
+        (diameter.begin.y + diameter.end.y) / 2),
+                diameter.begin.distance(diameter.end) / 2)
 
 
 /**
@@ -173,6 +176,8 @@ fun lineByPoints(a: Point, b: Point): Line {
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
 fun bisectorByPoints(a: Point, b: Point): Line = TODO()
+
+
 
 /**
  * Средняя

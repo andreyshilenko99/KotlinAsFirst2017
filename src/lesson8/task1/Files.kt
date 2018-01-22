@@ -70,8 +70,20 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  * Исключения (жюри, брошюра, парашют) в рамках данного задания обрабатывать не нужно
  *
  */
-fun sibilants(inputName: String, outputName: String) {
-    TODO()
+fun sibilants(inputName: String, outputName: String)  {
+    val input = File(inputName).bufferedReader()
+    val output = File(outputName).bufferedWriter()
+    var early = '\r'
+    val mapOfReplace = mapOf("ы" to "и", "Ы" to "И", "я" to "а", "Я" to "А", "ю" to "у", "Ю" to "У")
+    var group1 = "ыЫюЮяЯ"
+    var group2 = "жшщчЖШЧЩ"
+    for (symbol in input.readText()) {
+        if (early in group2 && symbol in group1 ) {
+            output.append( mapOfReplace["$symbol"])
+        } else output.append(symbol)
+        early = symbol
+    }
+    output.close()
 }
 
 /**
@@ -123,39 +135,30 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-//Так как readLines sequence то записываю в список строк
     val listOfLines = File(inputName).readLines()
     val out = File(outputName).bufferedWriter()
     var maxLen = 0
-//высчет самой длинной
     for (line in listOfLines){
         if (line.trim().length > maxLen) maxLen = line.trim().length
     }
-//выравнивание
     for (line in listOfLines){
-//пустая значит ничего не записываю
         if (line.isEmpty()) {
             out.newLine()
             continue
         }
-//разность строк
         var diff = maxLen - line.trim().length
-//трим убирает в начале и в конце пробелы делю по пробелам на слова в изменяемый список
         val lineInWords = line.trim().split(" ").toMutableList()
-//одно слово не может быть выравнено пробелами(по заданию)
         if (lineInWords.size == 1){
             out.write(line.trim())
             out.newLine()
             continue
         }
-// пока не заполню пробелами и разница между строками в длине не стане равна 0
         while (diff != 0) {
             for (i in 0 until lineInWords.size) {
                 if (i != lineInWords.lastIndex) {
                     lineInWords[i] += " "
                     diff--
                 }
-//наслучай если это наступит раньше
                 if (diff == 0) break
             }
         }
@@ -182,13 +185,9 @@ fun alignFileByWidth(inputName: String, outputName: String) {
 fun top20Words(inputName: String): Map<String, Int> {
     val textOnFile = File(inputName).readText().toLowerCase()
     val mapOfRepetitive = mutableMapOf<String, Int>()
-//ищем все слова (латинские или русские)
     val result = Regex("""([а-я|ё]+)|(\w+)""").findAll(textOnFile)
-// для всех найденных
     for (res in result){
-//берем значение(т.е. найденное слово)
         val word = res.value
-//если такое уже есть то увеличиваем зачение иначе заносим в map
         if (mapOfRepetitive[word] != null){
             var repetitiveNum = mapOfRepetitive[word] ?: throw IllegalArgumentException()
             repetitiveNum++
@@ -196,23 +195,16 @@ fun top20Words(inputName: String): Map<String, Int> {
         }
         else mapOfRepetitive.put(word, 1)
     }
-//список с Entries отсортированный
     val descendingListOfEntries = entriesSortedByValues(mapOfRepetitive)
-//map для 20ти
     val mapOfTwenty = mutableMapOf<String, Int>()
     for (i in 0 until descendingListOfEntries.size){
-//если набрали 20 то можно выйти из цикла
         if (i == 20) break
-//заносим сообственно значения в map
         mapOfTwenty.put(descendingListOfEntries[i].key, descendingListOfEntries[i].value)
     }
     return mapOfTwenty
 }
-//Сравнение
 fun <K, V : Comparable<V>> entriesSortedByValues(map: Map<K, V>): List<Map.Entry<K, V >> {
-//лист entries так как значения могут повторятся
     val sortedEntries = map.entries.toList()
-//сортируем при помощи компаратора
     Collections.sort(sortedEntries,
             { e1, e2 -> e2.value.compareTo(e1.value) }
     )
