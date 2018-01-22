@@ -43,6 +43,7 @@ class Triangle private constructor(private val points: Set<Point>) {
         return Math.sqrt(p * (p - a.distance(b)) * (p - b.distance(c)) * (p - c.distance(a)))
     }
 
+
     /**
      * Пример: треугольник содержит точку
      */

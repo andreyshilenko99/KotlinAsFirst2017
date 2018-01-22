@@ -250,6 +250,7 @@ fun squareSequenceDigit(n: Int): Int {
 }
 
 
+
 /**
  * Сложная
  *

@@ -264,6 +264,7 @@ fun kingTrajectory(start: Square, end: Square): List<Square> {
  * xxxxxxxx
  * xxxxxxxx
  *
+ *
  * Если клетки start и end совпадают, вернуть 0.
  * Если любая из клеток некорректна, бросить IllegalArgumentException().
  *

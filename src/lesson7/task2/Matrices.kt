@@ -112,6 +112,7 @@ fun <E> rotate(matrix: Matrix<E>): Matrix<E> {
     return revertMatrix
 }
 
+
 /**
  * Сложная
  *

@@ -154,6 +154,7 @@ fun times(a: List<Double>, b: List<Double>): Double {
     return multi
 }
 
+
 /**
  * Средняя
  *
