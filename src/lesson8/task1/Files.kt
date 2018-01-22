@@ -155,7 +155,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             continue
         }
         while (diff != 0) {
-            for (i in 0 until lineInWords.size) {
+            for (i in 0 until lineInWords.size -1) {
                 if (i != lineInWords.lastIndex) {
                     lineInWords[i] += " "
                     diff--
