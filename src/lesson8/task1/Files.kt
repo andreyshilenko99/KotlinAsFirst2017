@@ -136,40 +136,49 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    val listOfLines = File(inputName).readLines()
-    val out = File(outputName).bufferedWriter()
-    var maxLen = 0
+    val inputFile = File(inputName).bufferedReader()
+    val outFile = File(outputName).bufferedWriter()
+    val lines = mutableListOf<String>()
 
-    for (line in listOfLines) {
-        line.replace(Regex("\\s\\s+"), " ")
-        val lineLength = line.trim().length
-        if (lineLength > maxLen) maxLen = lineLength
-    }
-    for (line in listOfLines){
+    for (el in inputFile.readLines())
+        lines.add(el.trim().replace(Regex("\\s\\s+"), " "))
+
+    val maxLen = lines.maxBy { it.length }?.length ?: 0
+
+    for (line in lines) {
         if (line.isEmpty()) {
-            out.newLine()
+            outFile.newLine()
             continue
         }
-        var diff = maxLen - line.trim().length
-        val lineInWords = line.trim().split(" ").toMutableList()
-        if (lineInWords.size == 1){
-            out.write(line.trim())
-            out.newLine()
+
+        val wordsInLine = line.split(" ").toMutableList()
+
+        if (wordsInLine.size == 1) {
+            outFile.write(line)
+            outFile.newLine()
             continue
         }
-        while (diff != 0) {
-            for (i in 0 until lineInWords.size) {
-                if (i != lineInWords.lastIndex) {
-                    lineInWords[i] += " "
-                    diff --
-                }
-                if (diff == 0) break
-            }
-        }
-        out.write(lineInWords.joinToString(separator = " "))
-        out.newLine()
+
+        val spaces = wordsInLine.size - 1
+        val wordsLength = wordsInLine.sumBy { it.length }
+
+        val diffDiv = (maxLen - spaces - wordsLength) / spaces
+        val diffMod = (maxLen - spaces - wordsLength) % spaces
+
+        val spacesStr = StringBuilder()
+        for (i in 0 until diffDiv)
+            spacesStr.append(" ")
+
+        for (i in 0 until wordsInLine.lastIndex)
+            wordsInLine[i] += spacesStr.toString()
+
+        for (i in 0 until diffMod)
+            wordsInLine[i] += " "
+
+        outFile.write(wordsInLine.joinToString(separator = " "))
+        outFile.newLine()
     }
-    out.close()
+    outFile.close()
 }
 
 
