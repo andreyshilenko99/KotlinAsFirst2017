@@ -139,8 +139,11 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     val listOfLines = File(inputName).readLines()
     val out = File(outputName).bufferedWriter()
     var maxLen = 0
-    for (line in listOfLines){
-        if (line.trim().length > maxLen) maxLen = line.trim().length
+
+    for (line in listOfLines) {
+        line.replace(Regex("\\s\\s+"), " ")
+        val lineLength = line.trim().length
+        if (lineLength > maxLen) maxLen = lineLength
     }
     for (line in listOfLines){
         if (line.isEmpty()) {
@@ -155,10 +158,10 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             continue
         }
         while (diff != 0) {
-            for (i in 0 until lineInWords.size -1) {
+            for (i in 0 until lineInWords.size) {
                 if (i != lineInWords.lastIndex) {
                     lineInWords[i] += " "
-                    diff--
+                    diff --
                 }
                 if (diff == 0) break
             }
@@ -169,7 +172,8 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     out.close()
 }
 
-/**
+
+        /**
  * Средняя
  *
  * Во входном файле с именем inputName содержится некоторый текст (в том числе, и на русском языке).
