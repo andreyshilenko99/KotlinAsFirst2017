@@ -136,50 +136,50 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    val inputFile = File(inputName).bufferedReader()
-    val outFile = File(outputName).bufferedWriter()
-    val lines = mutableListOf<String>()
+        val inputFile = File(inputName).bufferedReader()
+        val outFile = File(outputName).bufferedWriter()
+        val lines = mutableListOf<String>()
 
-    for (el in inputFile.readLines())
-        lines.add(el.trim().replace(Regex("\\s\\s+"), " "))
+        for (el in inputFile.readLines())
+            lines.add(el.trim().replace(Regex("\\s\\s+"), " "))
 
-    val maxLen = lines.maxBy { it.length }?.length ?: 0
+        val maxLen = lines.maxBy { it.length }?.length ?: 0
 
-    for (line in lines) {
-        if (line.isEmpty()) {
+        for (line in lines) {
+            if (line.isEmpty()) {
+                outFile.newLine()
+                continue
+            }
+
+            val wordsInLine = line.split(" ").toMutableList()
+
+            if (wordsInLine.size == 1) {
+                outFile.write(line)
+                outFile.newLine()
+                continue
+            }
+
+            val spaces = wordsInLine.size - 1
+            val wordsLength = wordsInLine.sumBy { it.length }
+
+            val diffDiv = (maxLen - spaces - wordsLength) / spaces
+            val diffMod = (maxLen - spaces - wordsLength) % spaces
+
+            val spacesStr = StringBuilder()
+            for (i in 0 until diffDiv)
+                spacesStr.append(" ")
+
+            for (i in 0 until wordsInLine.lastIndex)
+                wordsInLine[i] += spacesStr.toString()
+
+            for (i in 0 until diffMod)
+                wordsInLine[i] += " "
+
+            outFile.write(wordsInLine.joinToString(separator = " "))
             outFile.newLine()
-            continue
         }
-
-        val wordsInLine = line.split(" ").toMutableList()
-
-        if (wordsInLine.size == 1) {
-            outFile.write(line)
-            outFile.newLine()
-            continue
-        }
-
-        val spaces = wordsInLine.size - 1
-        val wordsLength = wordsInLine.sumBy { it.length }
-
-        val diffDiv = (maxLen - spaces - wordsLength) / spaces
-        val diffMod = (maxLen - spaces - wordsLength) % spaces
-
-        val spacesStr = StringBuilder()
-        for (i in 0 until diffDiv)
-            spacesStr.append(" ")
-
-        for (i in 0 until wordsInLine.lastIndex)
-            wordsInLine[i] += spacesStr.toString()
-
-        for (i in 0 until diffMod)
-            wordsInLine[i] += " "
-
-        outFile.write(wordsInLine.joinToString(separator = " "))
-        outFile.newLine()
+        outFile.close()
     }
-    outFile.close()
-}
 
 
         /**
@@ -211,8 +211,8 @@ fun top20Words(inputName: String): Map<String, Int> {
     }
     val descendingListOfEntries = entriesSortedByValues(mapOfRepetitive)
     val mapOfTwenty = mutableMapOf<String, Int>()
-    for (i in 0 until descendingListOfEntries.size){
-        if (i == 20) break
+    for (i in 0  until descendingListOfEntries.size ){
+        if (i == 20)
         mapOfTwenty.put(descendingListOfEntries[i].key, descendingListOfEntries[i].value)
     }
     return mapOfTwenty
@@ -252,7 +252,33 @@ fun <K, V : Comparable<V>> entriesSortedByValues(map: Map<K, V>): List<Map.Entry
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    TODO()
+    val inputn = File(inputName).bufferedReader()
+    val input = inputn.readLines()
+    val output = File(outputName).bufferedWriter()
+    for (line in input) {
+        for (sym in line) {
+            val symbol = dictionary[sym.toLowerCase()]
+            when {
+                (dictionary[sym.toUpperCase()] != null) ->
+                    output.write(dictionary[sym.toUpperCase()])
+
+                (symbol != null && sym.isUpperCase()) ->
+                    output.write(symbol.first().toUpperCase() + symbol.drop(1))
+
+                (symbol != null && !(sym.isLetter())) ->
+                    output.write(symbol)
+
+                (symbol != null && sym.isLowerCase()) ->
+                    output.write(symbol)
+
+                (symbol == null) ->
+                    output.write(sym.toString())
+
+            }
+        }
+        output.newLine()
+    }
+    output.close()
 }
 
 /**

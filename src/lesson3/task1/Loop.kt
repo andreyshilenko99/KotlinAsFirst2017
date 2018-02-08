@@ -264,8 +264,9 @@ fun fibSequenceDigit(n: Int): Int {
     var result = fib(m)
     while (k < n) {
         m++
-        k += digitNumber(fib(m))
-        result = fib(m)
+        var fibm = fib(m)
+        k += digitNumber(fibm)
+        result = fibm
     }
     for (i in n until k) result /= 10
     return result % 10

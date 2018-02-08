@@ -6,6 +6,7 @@ import lesson1.task1.discriminant
 import lesson3.task1.isPrime
 import lesson3.task1.maxDivisor
 import lesson3.task1.minDivisor
+import java.lang.StringBuilder
 
 /**
  * Пример
@@ -246,7 +247,6 @@ fun convert(n: Int, base: Int): List<Int> {
     return newN.reversed()
 }
 
-
 /**
  * Сложная
  *
@@ -257,12 +257,11 @@ fun convert(n: Int, base: Int): List<Int> {
  */
 fun convertToString(n: Int, base: Int): String {
     val list = convert(n, base)
-    val abc = "abcdefghijklmnopqrstuvwxyz"
-    var str = ""
+    val str = StringBuilder()
     for (i in 0 until list.size)
-        str += if (list[i] < 10) list[i] else
-            abc[list[i] - 10]
-    return str
+       str.append ( if (list[i] < 10) list[i] else
+            (list[i] + 87).toChar())
+    return str.toString()
 }
 
 /**
@@ -294,11 +293,9 @@ fun decimal(digits: List<Int>, base: Int): Int {
  */
 fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
-    val ch = "0123456789"
-    val abc = "abcdefghijklmnopqrstuvwxyz"
     for (i in 0 until str.length)
-        if (str[i] in ch) list.add(ch.indexOf(str[i], 0)) else
-            list.add(abc.indexOf(str[i], 0) + 10)
+        if (str[i].toString().contains(Regex("[0-9]"))) list.add((str[i] - 48).toInt()) else
+            list.add((str[i] - 87).toInt())
     return decimal(list, base)
 }
 
