@@ -271,7 +271,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                     output.write(symbol)
 
                 (symbolUp != null) ->
-                    output.write(symbolUp)
+                    output.write(symbolUp.first().toUpperCase() + symbolUp.drop(1))
 
                 (sym.isUpperCase() && symbol != null) ->
                     output.write(symbol.first().toUpperCase() + symbol.drop(1))
@@ -284,6 +284,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     }
     output.close()
 }
+
 
 /**
  * Средняя
