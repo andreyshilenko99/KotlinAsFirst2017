@@ -294,8 +294,10 @@ fun decimal(digits: List<Int>, base: Int): Int {
 fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
     for (i in 0 until str.length)
-        if (str[i].toString().contains(Regex("[0-9]"))) list.add((str[i] - 48).toInt()) else
-            list.add((str[i] - 87).toInt())
+        if (str[i] in '0'..'9')
+            list.add(str[i] - '0')
+        else
+            list.add(str[i] - 'a' + 10)
     return decimal(list, base)
 }
 

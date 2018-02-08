@@ -255,28 +255,29 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     val inputn = File(inputName).bufferedReader()
     val input = inputn.readLines()
     val output = File(outputName).bufferedWriter()
+
     for (line in input) {
         for (sym in line) {
             val symbol = dictionary[sym.toLowerCase()]
-            when {
-                (dictionary[sym.toUpperCase()] != null) ->
-                    output.write(dictionary[sym.toUpperCase()])
+            val symbolUp = dictionary[sym.toUpperCase()]
 
-                (symbol != null && sym.isUpperCase()) ->
+            if (symbol == null && symbolUp == null) {
+                output.write(sym.toString())
+                continue
+            }
+
+            when {
+                (!(sym.isLetter())) ->
+                    output.write(symbol)
+
+                (symbolUp != null) ->
+                    output.write(symbolUp)
+
+                (sym.isUpperCase() && symbol != null) ->
                     output.write(symbol.first().toUpperCase() + symbol.drop(1))
 
-                (symbol != null && !(sym.isLetter())) ->
+                (sym.isLowerCase() && symbol != null) ->
                     output.write(symbol)
-
-                (symbol != null && sym.isLowerCase()) ->
-                    output.write(symbol)
-
-                (symbol != null && sym.isUpperCase()  ) ->
-                    output.write(symbol.toUpperCase())
-
-                (symbol == null) ->
-                    output.write(sym.toString())
-
             }
         }
         output.newLine()
