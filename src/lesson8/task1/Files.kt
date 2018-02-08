@@ -212,7 +212,7 @@ fun top20Words(inputName: String): Map<String, Int> {
     val descendingListOfEntries = entriesSortedByValues(mapOfRepetitive)
     val mapOfTwenty = mutableMapOf<String, Int>()
     for (i in 0  until descendingListOfEntries.size ){
-        if (i == 20)
+        if (i == 20) break
         mapOfTwenty.put(descendingListOfEntries[i].key, descendingListOfEntries[i].value)
     }
     return mapOfTwenty
@@ -270,6 +270,9 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
 
                 (symbol != null && sym.isLowerCase()) ->
                     output.write(symbol)
+
+                (symbol != null && sym.isUpperCase()  ) ->
+                    output.write(symbol.toUpperCase())
 
                 (symbol == null) ->
                     output.write(sym.toString())

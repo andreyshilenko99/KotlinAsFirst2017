@@ -260,7 +260,7 @@ fun convertToString(n: Int, base: Int): String {
     val str = StringBuilder()
     for (i in 0 until list.size)
        str.append ( if (list[i] < 10) list[i] else
-            (list[i] + 87).toChar())
+           (list[i] + 'W'.toInt()).toChar())
     return str.toString()
 }
 
