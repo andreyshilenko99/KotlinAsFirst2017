@@ -259,8 +259,8 @@ fun convertToString(n: Int, base: Int): String {
     val list = convert(n, base)
     val str = StringBuilder()
     for (i in 0 until list.size)
-       str.append ( if (list[i] < 10) list[i] else
-           (list[i] + 'W'.toInt()).toChar())
+     str.append ( if (list[i] < 10) list[i] else
+         (list[i] + 'a'.toInt() - 10 ).toChar())
     return str.toString()
 }
 
