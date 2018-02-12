@@ -155,23 +155,19 @@ fun bestLongJump(jumps: String): Int {
  */
 fun bestHighJump(jumps: String): Int {
     var maxVal = -1
-    var currentVal = -1
-    var listOfTryings = listOf("")
-    val listOfResults = jumps.split(" ").reversed()
-    for (i in listOfResults) {
-        try {
-            currentVal = i.toInt()
-            if ("+" in listOfTryings && currentVal > maxVal)
+    val listOfResults = jumps.split(" ")
+    if (jumps.contains(Regex("[^-0123456789+% ]")))
+    return -1
+    for (i in 1 until listOfResults.size step 2) {
+        if (listOfResults[i].contains(Regex("[+]"))) {
+            val currentVal = listOfResults[i - 1].toInt()
+            if (maxVal < currentVal)
                 maxVal = currentVal
-        } catch (e: NumberFormatException) {
-            listOfTryings = i.split("")
-            val elements = listOfTryings.filter { it == "+" && it == "-" && it == "%" && it == "" }
-            if (!elements.isEmpty())
-                return -1
         }
     }
     return maxVal
 }
+
 
 /**
  * Сложная
@@ -211,7 +207,7 @@ fun firstDuplicateIndex(str: String): Int {
     var index = 0
     for (i in wordsList) {
         if (i.toLowerCase() == prevWord.toLowerCase()) {
-            return str.indexOf(prevWord.first(), index - 1)
+            return index - 1
         }
         index += prevWord.length + 1
         prevWord = i
